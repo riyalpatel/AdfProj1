@@ -34,7 +34,19 @@
 						}
 					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_FromAPI",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ToAdls",
+						"type": "DatasetReference"
+					}
+				]
 			},
 			{
 				"name": "ToSilver",
@@ -56,10 +68,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": {
-						"value": "@concat('/Users/rbp.fetrgmail.com/',pipeline().parameters.notebookname)",
-						"type": "Expression"
-					}
+					"notebookPath": "/Users/rbp.fetr@gmail.com/Assing1"
 				},
 				"linkedServiceName": {
 					"referenceName": "LS_ToNotebook",
@@ -86,10 +95,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": {
-						"value": "@concat('/Users/rbp.fetrgmail.com/',pipeline().parameters.notebookname)",
-						"type": "Expression"
-					}
+					"notebookPath": "/Users/rbp.fetr@gmail.com/Assign1Part2"
 				},
 				"linkedServiceName": {
 					"referenceName": "LS_ToNotebook",
@@ -97,11 +103,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"notebookname": {
-				"type": "String"
-			}
-		},
 		"annotations": [],
 		"lastPublishTime": "2024-12-04T15:25:25Z"
 	},
