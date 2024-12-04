@@ -1,0 +1,110 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "CopyFromAPI",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"supportRFC5988": "true"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_FromAPI",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ToAdls",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "ToSilver",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CopyFromAPI",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rbp.fetr@gmail.com/Assing1"
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_ToNotebook",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "SilverToGold",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "ToSilver",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/rbp.fetr@gmail.com/Assign1Part2"
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_ToNotebook",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-12-04T15:25:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

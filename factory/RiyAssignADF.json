@@ -1,0 +1,9 @@
+{
+	"name": "RiyAssignADF",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ae84c4a9-0cf2-4959-9e77-7ffa5debcb0f",
+		"tenantId": "eb21f91a-57e1-4d3c-9680-2840d14a9a66"
+	}
+}
