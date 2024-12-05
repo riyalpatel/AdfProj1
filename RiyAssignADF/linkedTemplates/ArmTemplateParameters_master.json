@@ -5,11 +5,17 @@
 		"factoryName": {
 			"value": "RiyAssignADF"
 		},
+		"FromAdls_accountKey": {
+			"value": ""
+		},
 		"LS_ToAdls_accountKey": {
 			"value": ""
 		},
 		"LS_ToNotebook_accessToken": {
 			"value": ""
+		},
+		"FromAdls_properties_typeProperties_url": {
+			"value": "https://riyassignadls.dfs.core.windows.net/"
 		},
 		"LS_ToAdls_properties_typeProperties_url": {
 			"value": "https://riyassignadls.dfs.core.windows.net/"

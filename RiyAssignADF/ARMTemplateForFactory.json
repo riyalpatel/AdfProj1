@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "RiyAssignADF"
 		},
+		"FromAdls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'FromAdls'"
+		},
 		"LS_ToAdls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ToAdls'"
@@ -14,6 +18,10 @@
 		"LS_ToNotebook_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_ToNotebook'"
+		},
+		"FromAdls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://riyassignadls.dfs.core.windows.net/"
 		},
 		"LS_ToAdls_properties_typeProperties_url": {
 			"type": "string",
@@ -168,6 +176,51 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_FromAdls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "FromAdls",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "locations.csv",
+						"fileSystem": "metadata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Id",
+						"type": "String"
+					},
+					{
+						"name": " LocationName",
+						"type": "String"
+					},
+					{
+						"name": " LocationId",
+						"type": "String"
+					},
+					{
+						"name": " SensorId",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/FromAdls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_ToAdls')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -190,6 +243,23 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ToAdls')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FromAdls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('FromAdls_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('FromAdls_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LS_ToAdls')]",

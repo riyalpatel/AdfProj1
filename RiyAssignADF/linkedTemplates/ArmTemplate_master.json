@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "RiyAssignADF"
 		},
+		"FromAdls_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'FromAdls'"
+		},
 		"LS_ToAdls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ToAdls'"
@@ -14,6 +18,10 @@
 		"LS_ToNotebook_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_ToNotebook'"
+		},
+		"FromAdls_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://riyassignadls.dfs.core.windows.net/"
 		},
 		"LS_ToAdls_properties_typeProperties_url": {
 			"type": "string",
@@ -50,11 +58,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"FromAdls_accountKey": {
+						"value": "[parameters('FromAdls_accountKey')]"
+					},
 					"LS_ToAdls_accountKey": {
 						"value": "[parameters('LS_ToAdls_accountKey')]"
 					},
 					"LS_ToNotebook_accessToken": {
 						"value": "[parameters('LS_ToNotebook_accessToken')]"
+					},
+					"FromAdls_properties_typeProperties_url": {
+						"value": "[parameters('FromAdls_properties_typeProperties_url')]"
 					},
 					"LS_ToAdls_properties_typeProperties_url": {
 						"value": "[parameters('LS_ToAdls_properties_typeProperties_url')]"
