@@ -1,0 +1,40 @@
+{
+	"name": "DS_FromAdls",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "FromAdls",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "locations.csv",
+				"fileSystem": "metadata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Id",
+				"type": "String"
+			},
+			{
+				"name": " LocationName",
+				"type": "String"
+			},
+			{
+				"name": " LocationId",
+				"type": "String"
+			},
+			{
+				"name": " SensorId",
+				"type": "String"
+			}
+		]
+	}
+}
