@@ -434,7 +434,8 @@
 			"properties": {
 				"parameters": {
 					"SensorId": {
-						"type": "String"
+						"type": "String",
+						"defaultValue": "@dataset().SansorId"
 					}
 				},
 				"annotations": [],
