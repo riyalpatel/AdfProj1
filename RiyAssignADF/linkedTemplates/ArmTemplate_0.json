@@ -358,7 +358,8 @@
 								"referenceName": "DS_FromAdls",
 								"type": "DatasetReference",
 								"parameters": {}
-							}
+							},
+							"firstRowOnly": false
 						}
 					},
 					{
