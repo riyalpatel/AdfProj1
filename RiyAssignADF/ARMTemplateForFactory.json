@@ -206,7 +206,7 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "CopyFromAPI_copy1",
+									"name": "CopyFromAPI_Copy",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -218,7 +218,8 @@
 									},
 									"userProperties": [
 										{
-											"name": "DS_SansorId"
+											"name": "DS_SansorId",
+											"value": "@item().SensorId"
 										}
 									],
 									"typeProperties": {
@@ -249,7 +250,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"SansorId": {
-													"value": "@items().SensorId",
+													"value": "@item().SensorId",
 													"type": "Expression"
 												}
 											}
@@ -327,6 +328,7 @@
 						"fileSystem": "metadata"
 					},
 					"columnDelimiter": ",",
+					"rowDelimiter": "\n",
 					"escapeChar": "\\",
 					"firstRowAsHeader": true,
 					"quoteChar": "\""
