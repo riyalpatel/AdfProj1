@@ -47,7 +47,10 @@
 						"referenceName": "DS_FromAPI",
 						"type": "DatasetReference",
 						"parameters": {
-							"SensorID": "9975831"
+							"SensorID": {
+								"value": "'9975831'",
+								"type": "Expression"
+							}
 						}
 					}
 				],
