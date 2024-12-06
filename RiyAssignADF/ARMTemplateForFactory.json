@@ -156,7 +156,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"SensorID": {
-													"value": "@item.SensorId",
+													"value": "@item().SensorId",
 													"type": "Expression"
 												}
 											}
