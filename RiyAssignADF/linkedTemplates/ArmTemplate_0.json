@@ -107,13 +107,7 @@
 				"typeProperties": {
 					"url": "[parameters('LS_from_api_properties_typeProperties_url')]",
 					"enableServerCertificateValidation": true,
-					"authenticationType": "Anonymous",
-					"authHeaders": {
-						"X-API-Key": {
-							"type": "SecureString",
-							"value": "afb47d8e623f85636c5f1dac39ccd550e0e59f9775d69fb5116fed2f5f99626e"
-						}
-					}
+					"authenticationType": "Anonymous"
 				}
 			},
 			"dependsOn": []
@@ -293,7 +287,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup').output.value",
+								"value": "@activity('Lookup').output.values",
 								"type": "Expression"
 							},
 							"isSequential": true,
