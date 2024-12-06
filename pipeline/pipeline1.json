@@ -5,7 +5,14 @@
 			{
 				"name": "CopyFromAPI",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -120,6 +127,10 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output",
+						"type": "Expression"
+					},
 					"activities": [
 						{
 							"name": "CopyFromAPI_copy",
@@ -159,7 +170,7 @@
 									"referenceName": "DS_FromAPI",
 									"type": "DatasetReference",
 									"parameters": {
-										"SensorID": "9975831"
+										"SensorID": "@items.SensorId"
 									}
 								}
 							],
