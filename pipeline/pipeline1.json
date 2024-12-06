@@ -116,7 +116,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"SensorID": {
-											"value": "activity('Lookup1').output.SensorId",
+											"value": "@item().SensorId",
 											"type": "Expression"
 										}
 									}
