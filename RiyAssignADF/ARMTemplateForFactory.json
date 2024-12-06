@@ -29,7 +29,7 @@
 		},
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',linkedService().SensorId,'/days')}"
+			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/791/days')}"
 		}
 	},
 	"variables": {
@@ -53,11 +53,7 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [
-							{
-								"name": "SansorId"
-							}
-						],
+						"userProperties": [],
 						"typeProperties": {
 							"source": {
 								"type": "RestSource",
@@ -83,9 +79,7 @@
 							{
 								"referenceName": "DS_FromAPI",
 								"type": "DatasetReference",
-								"parameters": {
-									"SansorId": "6554967"
-								}
+								"parameters": {}
 							}
 						],
 						"outputs": [
@@ -174,18 +168,7 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_from_api",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"SensorId": {
-							"value": "@dataset().SansorId",
-							"type": "Expression"
-						}
-					}
-				},
-				"parameters": {
-					"SansorId": {
-						"type": "String"
-					}
+					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "RestResource",
@@ -327,11 +310,6 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"parameters": {
-					"SensorId": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
 				"type": "RestService",
 				"typeProperties": {

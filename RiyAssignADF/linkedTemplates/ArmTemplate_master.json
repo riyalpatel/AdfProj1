@@ -29,7 +29,7 @@
 		},
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',linkedService().SensorId,'/days')}"
+			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/791/days')}"
 		},
 		"containerUri": {
 			"type": "string",
