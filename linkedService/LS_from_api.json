@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "@{concat('https://api.openaq.org/v3/sensors/791/days')}",
+			"url": "@{concat('https://api.openaq.org/v3/sensors/9975831/days')}",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
