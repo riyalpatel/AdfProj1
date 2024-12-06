@@ -29,7 +29,7 @@
 		},
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://api.openaq.org/v3/sensors/8640594/days"
+			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',linkedService().SensorId,'/days')}"
 		}
 	},
 	"variables": {
@@ -97,6 +97,11 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"parameters": {
+					"SensorId": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"type": "RestService",
 				"typeProperties": {
@@ -114,7 +119,18 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_from_api",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"SensorId": {
+							"value": "@dataset().SansorId",
+							"type": "Expression"
+						}
+					}
+				},
+				"parameters": {
+					"SansorId": {
+						"type": "String"
+					}
 				},
 				"annotations": [],
 				"type": "RestResource",
@@ -203,7 +219,14 @@
 					{
 						"name": "CopyFromAPI",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "ForEach1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -211,7 +234,11 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
+						"userProperties": [
+							{
+								"name": "SansorId"
+							}
+						],
 						"typeProperties": {
 							"source": {
 								"type": "RestSource",
@@ -301,6 +328,119 @@
 							"referenceName": "LS_ToNotebook",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "DS_FromAdls",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "CopyFromAPI_copy1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [
+										{
+											"name": "SansorId"
+										}
+									],
+									"typeProperties": {
+										"source": {
+											"type": "RestSource",
+											"additionalColumns": [
+												{
+													"name": "Location",
+													"value": {
+														"value": "@item().LocationName",
+														"type": "Expression"
+													}
+												}
+											],
+											"httpRequestTimeout": "00:01:40",
+											"requestInterval": "00.00:00:00.010",
+											"requestMethod": "GET",
+											"paginationRules": {
+												"supportRFC5988": "true"
+											}
+										},
+										"sink": {
+											"type": "JsonSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "MergeFiles"
+											},
+											"formatSettings": {
+												"type": "JsonWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_FromAPI",
+											"type": "DatasetReference",
+											"parameters": {
+												"SansorId": "item().LocationId"
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ToAdls",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
 					}
 				],
 				"policy": {
@@ -312,7 +452,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_FromAPI')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ToAdls')]",
-				"[concat(variables('factoryId'), '/linkedServices/LS_ToNotebook')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_ToNotebook')]",
+				"[concat(variables('factoryId'), '/datasets/DS_FromAdls')]"
 			]
 		}
 	]

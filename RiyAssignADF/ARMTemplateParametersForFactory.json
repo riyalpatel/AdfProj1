@@ -21,7 +21,7 @@
 			"value": "https://riyassignadls.dfs.core.windows.net/"
 		},
 		"LS_from_api_properties_typeProperties_url": {
-			"value": "https://api.openaq.org/v3/sensors/8640594/days"
+			"value": "@{concat('https://api.openaq.org/v3/sensors/',linkedService().SensorId,'/days')}"
 		}
 	}
 }
