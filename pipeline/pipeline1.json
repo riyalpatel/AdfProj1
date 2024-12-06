@@ -38,7 +38,10 @@
 				"inputs": [
 					{
 						"referenceName": "DS_FromAPI",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SensorID": "9975831"
+						}
 					}
 				],
 				"outputs": [
