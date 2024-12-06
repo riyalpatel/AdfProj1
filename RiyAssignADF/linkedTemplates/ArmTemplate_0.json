@@ -220,9 +220,11 @@
 					{
 						"name": "CopyFromAPI",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
-								"activity": "ForEach1",
+								"activity": "ForEach",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -279,6 +281,8 @@
 					{
 						"name": "ToSilver",
 						"type": "DatabricksNotebook",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "CopyFromAPI",
@@ -306,6 +310,8 @@
 					{
 						"name": "SilverToGold",
 						"type": "DatabricksNotebook",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "ToSilver",
@@ -363,7 +369,7 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach",
 						"type": "ForEach",
 						"dependsOn": [
 							{
