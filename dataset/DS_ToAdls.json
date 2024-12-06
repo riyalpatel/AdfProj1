@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat('AQI_Data',dataset().SansorId,'.json')",
+					"value": "@concat('AQI_Data_',dataset().SansorId,'.json')",
 					"type": "Expression"
 				},
 				"fileSystem": "bronze"
