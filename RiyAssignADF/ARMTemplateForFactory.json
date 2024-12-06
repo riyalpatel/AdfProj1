@@ -156,7 +156,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"SensorID": {
-													"value": "@item()",
+													"value": "@item().SensorId",
 													"type": "Expression"
 												}
 											}
@@ -202,7 +202,7 @@
 								"type": "DatasetReference",
 								"parameters": {}
 							},
-							"firstRowOnly": false
+							"firstRowOnly": true
 						}
 					}
 				],
