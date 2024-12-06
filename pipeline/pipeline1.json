@@ -140,7 +140,8 @@
 					"dataset": {
 						"referenceName": "DS_FromAdls",
 						"type": "DatasetReference"
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
