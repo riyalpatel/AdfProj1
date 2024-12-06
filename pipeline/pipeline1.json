@@ -51,8 +51,6 @@
 			{
 				"name": "ToSilver",
 				"type": "DatabricksNotebook",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "CopyFromAPI",
