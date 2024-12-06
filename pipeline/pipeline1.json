@@ -38,10 +38,7 @@
 				"inputs": [
 					{
 						"referenceName": "DS_FromAPI",
-						"type": "DatasetReference",
-						"parameters": {
-							"SansorId": "791"
-						}
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
