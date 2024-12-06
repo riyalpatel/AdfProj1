@@ -523,7 +523,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"SansorId": {
-													"value": "@item().SansorId",
+													"value": "@item().SensorId",
 													"type": "Expression"
 												}
 											}
