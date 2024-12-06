@@ -115,7 +115,10 @@
 									"referenceName": "DS_FromAPI",
 									"type": "DatasetReference",
 									"parameters": {
-										"SensorID": "@items.SensorId"
+										"SensorID": {
+											"value": "@item.SensorId",
+											"type": "Expression"
+										}
 									}
 								}
 							],
