@@ -102,10 +102,12 @@
 								"sink": {
 									"type": "JsonSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "MergeFiles"
 									},
 									"formatSettings": {
-										"type": "JsonWriteSettings"
+										"type": "JsonWriteSettings",
+										"filePattern": "setOfObjects"
 									}
 								},
 								"enableStaging": false
