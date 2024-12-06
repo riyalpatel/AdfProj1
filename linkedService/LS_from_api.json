@@ -1,11 +1,6 @@
 {
 	"name": "LS_from_api",
 	"properties": {
-		"parameters": {
-			"SensorId": {
-				"type": "String"
-			}
-		},
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
