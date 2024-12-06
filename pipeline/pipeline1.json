@@ -124,7 +124,13 @@
 							"outputs": [
 								{
 									"referenceName": "DS_ToAdls",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"SansorId": {
+											"value": "@item().SansorId",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						}
