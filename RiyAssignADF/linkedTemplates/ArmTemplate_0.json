@@ -196,16 +196,197 @@
 					"referenceName": "LS_ToAdls",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"SansorId": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"type": "Json",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "AQI_Data.json",
+						"fileName": {
+							"value": "@concat('AQI_Data',dataset().SansorId,'.json')",
+							"type": "Expression"
+						},
 						"fileSystem": "bronze"
 					}
 				},
-				"schema": {}
+				"schema": {
+					"type": "object",
+					"properties": {
+						"meta": {
+							"type": "object",
+							"properties": {
+								"name": {
+									"type": "string"
+								},
+								"website": {
+									"type": "string"
+								},
+								"page": {
+									"type": "integer"
+								},
+								"limit": {
+									"type": "integer"
+								},
+								"found": {
+									"type": "string"
+								}
+							}
+						},
+						"results": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"properties": {
+									"value": {
+										"type": "number"
+									},
+									"flagInfo": {
+										"type": "object",
+										"properties": {
+											"hasFlags": {
+												"type": "boolean"
+											}
+										}
+									},
+									"parameter": {
+										"type": "object",
+										"properties": {
+											"id": {
+												"type": "integer"
+											},
+											"name": {
+												"type": "string"
+											},
+											"units": {
+												"type": "string"
+											},
+											"displayName": {
+												"type": "null"
+											}
+										}
+									},
+									"period": {
+										"type": "object",
+										"properties": {
+											"label": {
+												"type": "string"
+											},
+											"interval": {
+												"type": "string"
+											},
+											"datetimeFrom": {
+												"type": "object",
+												"properties": {
+													"utc": {
+														"type": "string"
+													},
+													"local": {
+														"type": "string"
+													}
+												}
+											},
+											"datetimeTo": {
+												"type": "object",
+												"properties": {
+													"utc": {
+														"type": "string"
+													},
+													"local": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									},
+									"coordinates": {
+										"type": "null"
+									},
+									"summary": {
+										"type": "object",
+										"properties": {
+											"min": {
+												"type": "number"
+											},
+											"q02": {
+												"type": "number"
+											},
+											"q25": {
+												"type": "number"
+											},
+											"median": {
+												"type": "number"
+											},
+											"q75": {
+												"type": "number"
+											},
+											"q98": {
+												"type": "number"
+											},
+											"max": {
+												"type": "number"
+											},
+											"avg": {
+												"type": "number"
+											},
+											"sd": {
+												"type": "number"
+											}
+										}
+									},
+									"coverage": {
+										"type": "object",
+										"properties": {
+											"expectedCount": {
+												"type": "integer"
+											},
+											"expectedInterval": {
+												"type": "string"
+											},
+											"observedCount": {
+												"type": "integer"
+											},
+											"observedInterval": {
+												"type": "string"
+											},
+											"percentComplete": {
+												"type": "number"
+											},
+											"percentCoverage": {
+												"type": "number"
+											},
+											"datetimeFrom": {
+												"type": "object",
+												"properties": {
+													"utc": {
+														"type": "string"
+													},
+													"local": {
+														"type": "string"
+													}
+												}
+											},
+											"datetimeTo": {
+												"type": "object",
+												"properties": {
+													"utc": {
+														"type": "string"
+													},
+													"local": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ToAdls')]"
@@ -309,10 +490,7 @@
 											"type": "RestSource",
 											"httpRequestTimeout": "00:01:40",
 											"requestInterval": "00.00:00:00.010",
-											"requestMethod": "GET",
-											"paginationRules": {
-												"supportRFC5988": "true"
-											}
+											"requestMethod": "GET"
 										},
 										"sink": {
 											"type": "JsonSink",
@@ -321,7 +499,8 @@
 												"copyBehavior": "MergeFiles"
 											},
 											"formatSettings": {
-												"type": "JsonWriteSettings"
+												"type": "JsonWriteSettings",
+												"filePattern": "setOfObjects"
 											}
 										},
 										"enableStaging": false
@@ -342,7 +521,12 @@
 										{
 											"referenceName": "DS_ToAdls",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"SansorId": {
+													"value": "@item().SansorId",
+													"type": "Expression"
+												}
+											}
 										}
 									]
 								}
