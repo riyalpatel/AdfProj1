@@ -170,7 +170,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "CopyFromAPI_Copy",
+							"name": "CopyFromAPIC",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
