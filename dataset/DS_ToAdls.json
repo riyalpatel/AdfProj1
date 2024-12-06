@@ -5,12 +5,20 @@
 			"referenceName": "LS_ToAdls",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"SansorId": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"type": "Json",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "AQI_Data.json",
+				"fileName": {
+					"value": "@concat('AQI_Data',dataset().SansorId,'.json')",
+					"type": "Expression"
+				},
 				"fileSystem": "bronze"
 			}
 		},
