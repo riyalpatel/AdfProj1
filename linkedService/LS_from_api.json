@@ -1,15 +1,10 @@
 {
 	"name": "LS_from_api",
 	"properties": {
-		"parameters": {
-			"SensorId": {
-				"type": "string"
-			}
-		},
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "@{concat('https://api.openaq.org/v3/sensors/',linkedService().SensorId,'/days')}",
+			"url": "@{concat('https://api.openaq.org/v3/sensors/791/days')}",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
