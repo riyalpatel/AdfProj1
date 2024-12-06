@@ -156,7 +156,7 @@
 						}
 					},
 					{
-						"name": "Lookup1",
+						"name": "Lookup",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -191,7 +191,7 @@
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup1",
+								"activity": "Lookup",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -199,6 +199,10 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup').output",
+								"type": "Expression"
+							},
 							"isSequential": true,
 							"activities": [
 								{
@@ -214,7 +218,7 @@
 									},
 									"userProperties": [
 										{
-											"name": "SansorId"
+											"name": "DS_SansorId"
 										}
 									],
 									"typeProperties": {
@@ -244,7 +248,10 @@
 											"referenceName": "DS_FromAPI",
 											"type": "DatasetReference",
 											"parameters": {
-												"SansorId": "item().LocationId"
+												"SansorId": {
+													"value": "@items().SensorId",
+													"type": "Expression"
+												}
 											}
 										}
 									],
@@ -434,8 +441,7 @@
 			"properties": {
 				"parameters": {
 					"SensorId": {
-						"type": "String",
-						"defaultValue": "@dataset().SansorId"
+						"type": "string"
 					}
 				},
 				"annotations": [],
