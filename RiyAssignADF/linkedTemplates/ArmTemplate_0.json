@@ -293,7 +293,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup').output",
+								"value": "@activity('Lookup').output.value",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -337,7 +337,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"SensorID": {
-													"value": "@activity('Lookup').output.firstRow.SensorId",
+													"value": "@activity('Lookup').output.SensorId",
 													"type": "Expression"
 												}
 											}
