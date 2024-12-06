@@ -112,7 +112,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup1').output.value",
+								"value": "@activity('Lookup1').output",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -155,7 +155,10 @@
 											"referenceName": "DS_FromAPI",
 											"type": "DatasetReference",
 											"parameters": {
-												"SensorID": "@items.SensorId"
+												"SensorID": {
+													"value": "@item.SensorId",
+													"type": "Expression"
+												}
 											}
 										}
 									],
