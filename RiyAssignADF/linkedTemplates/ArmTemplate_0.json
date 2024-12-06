@@ -388,7 +388,7 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "CopyFromAPI_Copy",
+									"name": "CopyFromAPIC",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -398,12 +398,7 @@
 										"secureOutput": false,
 										"secureInput": false
 									},
-									"userProperties": [
-										{
-											"name": "DS_SansorId",
-											"value": "@item().SensorId"
-										}
-									],
+									"userProperties": [],
 									"typeProperties": {
 										"source": {
 											"type": "RestSource",
