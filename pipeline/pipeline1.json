@@ -63,7 +63,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup1",
+						"activity": "Lookup",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -72,7 +72,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup1').output",
+						"value": "@activity('Lookup').output",
 						"type": "Expression"
 					},
 					"isSequential": true,
@@ -116,7 +116,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"SensorID": {
-											"value": "@item().SensorId",
+											"value": "activity('Lookup1').output",
 											"type": "Expression"
 										}
 									}
@@ -133,7 +133,7 @@
 				}
 			},
 			{
-				"name": "Lookup1",
+				"name": "Lookup",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
