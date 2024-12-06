@@ -3,7 +3,18 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_from_api",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"Sensorid": {
+					"value": "@dataset().SensorID",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"SensorID": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "RestResource",
