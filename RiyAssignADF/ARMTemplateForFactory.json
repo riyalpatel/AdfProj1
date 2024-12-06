@@ -338,7 +338,7 @@
 						"type": "String"
 					},
 					{
-						"name": " SensorId",
+						"name": " SensorId\r",
 						"type": "String"
 					}
 				]
