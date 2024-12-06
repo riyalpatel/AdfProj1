@@ -293,7 +293,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup').output.value",
+								"value": "@activity('Lookup').output",
 								"type": "Expression"
 							},
 							"isSequential": true,
