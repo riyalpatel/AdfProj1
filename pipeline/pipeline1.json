@@ -162,7 +162,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"Directory": "locations",
-							"fileName": "locations.csv"
+							"fileName": "locations"
 						}
 					},
 					"firstRowOnly": false
