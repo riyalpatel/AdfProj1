@@ -124,7 +124,8 @@
 										"SansorId": {
 											"value": "@item().SensorId",
 											"type": "Expression"
-										}
+										},
+										"SensorData": "SensorData"
 									}
 								}
 							]
@@ -189,25 +190,15 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
+						"type": "JsonSink",
 						"storeSettings": {
 							"type": "AzureBlobFSWriteSettings"
 						},
 						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
+							"type": "JsonWriteSettings"
 						}
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
+					"enableStaging": false
 				},
 				"inputs": [
 					{
@@ -217,11 +208,10 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_FromAdls",
+						"referenceName": "DS_ToAdls",
 						"type": "DatasetReference",
 						"parameters": {
-							"Directory": "Sensors",
-							"fileName": "Sensors_data"
+							"SensorData": "SensorData"
 						}
 					}
 				]
