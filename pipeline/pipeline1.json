@@ -211,7 +211,8 @@
 						"referenceName": "DS_ToAdls",
 						"type": "DatasetReference",
 						"parameters": {
-							"SensorData": "SensorData"
+							"Directory": "Sensors",
+							"fileName": "Sensors_List"
 						}
 					}
 				]
