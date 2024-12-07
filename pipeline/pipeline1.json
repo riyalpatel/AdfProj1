@@ -159,7 +159,11 @@
 					},
 					"dataset": {
 						"referenceName": "DS_FromAdls",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": "locations",
+							"fileName": "locations.csv"
+						}
 					},
 					"firstRowOnly": false
 				}
