@@ -24,7 +24,7 @@
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@dataset().SensorData",
+					"value": "@dataset().SansorId",
 					"type": "Expression"
 				},
 				"fileSystem": "bronze"
