@@ -218,7 +218,11 @@
 				"outputs": [
 					{
 						"referenceName": "DS_FromAdls",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"Directory": "Sensors",
+							"fileName": "Sensors_data"
+						}
 					}
 				]
 			}
