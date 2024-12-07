@@ -8,6 +8,10 @@
 		"parameters": {
 			"SansorId": {
 				"type": "String"
+			},
+			"SensorData": {
+				"type": "String",
+				"defaultValue": "SensorData"
 			}
 		},
 		"annotations": [],
@@ -17,6 +21,10 @@
 				"type": "AzureBlobFSLocation",
 				"fileName": {
 					"value": "@concat('AQI_Data_',dataset().SansorId,'.json')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().SensorData",
 					"type": "Expression"
 				},
 				"fileSystem": "bronze"
