@@ -1,5 +1,5 @@
 {
-	"name": "DS_ToAdls",
+	"name": "DS_JsonToAdls",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_ToAdls",

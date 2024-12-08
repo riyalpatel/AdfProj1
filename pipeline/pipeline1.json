@@ -118,7 +118,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DS_ToAdls",
+									"referenceName": "DS_JsonToAdls",
 									"type": "DatasetReference",
 									"parameters": {
 										"FIleName": {
@@ -205,7 +205,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_ToAdls",
+						"referenceName": "DS_JsonToAdls",
 						"type": "DatasetReference",
 						"parameters": {
 							"FIleName": "SensorList",
@@ -254,7 +254,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_ToAdls",
+						"referenceName": "DS_JsonToAdls",
 						"type": "DatasetReference",
 						"parameters": {
 							"FIleName": "AlbertaSmokePlump.json",
