@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'FromAdls'"
 		},
+		"LS_SqlDb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SqlDb'"
+		},
 		"LS_ToAdls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ToAdls'"
@@ -19,9 +23,29 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_ToNotebook'"
 		},
+		"LS_S3Excle_secretAccessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'secretAccessKey' of 'LS_S3Excle'"
+		},
+		"LS_CsvToAdls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_CsvToAdls'"
+		},
 		"FromAdls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://riyassignadls.dfs.core.windows.net/"
+		},
+		"LS_SqlDb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "riyaldbsrvr.database.windows.net"
+		},
+		"LS_SqlDb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dbAssignment1"
+		},
+		"LS_SqlDb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "radmin"
 		},
 		"LS_ToAdls_properties_typeProperties_url": {
 			"type": "string",
@@ -30,6 +54,10 @@
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',string(linkedService().Sensorid),'/days')}"
+		},
+		"LS_S3Excle_properties_typeProperties_accessKeyId": {
+			"type": "string",
+			"defaultValue": "AKIAQEIP3UWSXRW3ER6D"
 		}
 	},
 	"variables": {
@@ -48,6 +76,28 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('FromAdls_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SqlDb')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('LS_SqlDb_properties_typeProperties_server')]",
+					"database": "[parameters('LS_SqlDb_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_SqlDb_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_SqlDb_password')]"
 					}
 				}
 			},
@@ -113,6 +163,69 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "Canada Central",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 10,
+							"cleanup": false,
+							"customProperties": []
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime2')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_S3Excle')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AmazonS3",
+				"typeProperties": {
+					"serviceUrl": "https://s3.amazonaws.com",
+					"accessKeyId": "[parameters('LS_S3Excle_properties_typeProperties_accessKeyId')]",
+					"secretAccessKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_S3Excle_secretAccessKey')]"
+					},
+					"authenticationType": "AccessKey"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_CsvToAdls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_CsvToAdls_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_FromAPI')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -150,12 +263,27 @@
 					"referenceName": "FromAdls",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"Directory": {
+						"type": "String"
+					},
+					"fileName": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "locations.csv",
+						"fileName": {
+							"value": "@concat(dataset().fileName,'.csv')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().Directory",
+							"type": "Expression"
+						},
 						"fileSystem": "metadata"
 					},
 					"columnDelimiter": ",",
@@ -188,7 +316,48 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_ToAdls')]",
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDb')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SqlDb",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "latitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CanadaSensors"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SqlDb')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_JsonToAdls')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -197,8 +366,12 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"SansorId": {
+					"FIleName": {
 						"type": "String"
+					},
+					"Directory": {
+						"type": "String",
+						"defaultValue": "SensorData"
 					}
 				},
 				"annotations": [],
@@ -207,7 +380,11 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"fileName": {
-							"value": "@concat('AQI_Data',dataset().SansorId,'.json')",
+							"value": "@dataset().FIleName",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().Directory",
 							"type": "Expression"
 						},
 						"fileSystem": "bronze"
@@ -393,6 +570,205 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_S3Excle')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_S3Excle",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "222 Plume Observations",
+					"location": {
+						"type": "AmazonS3Location",
+						"bucketName": "bucketforriyal",
+						"fileName": "Alberta_Smoke_Plume_Observation_Study.xlsx"
+					},
+					"firstRowAsHeader": false
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_S3Excle')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSVToAdls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_CsvToAdls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"DirectoryName": {
+						"type": "String"
+					},
+					"FileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().DirectoryName",
+							"type": "Expression"
+						},
+						"container": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_CsvToAdls')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -401,14 +777,9 @@
 					{
 						"name": "ToSilver",
 						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "ForEach1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
+						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -474,7 +845,7 @@
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "CopyFromAPI_copy",
+									"name": "APItoAdls",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -519,13 +890,14 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "DS_ToAdls",
+											"referenceName": "DS_JsonToAdls",
 											"type": "DatasetReference",
 											"parameters": {
-												"SansorId": {
-													"value": "@item().SensorId",
+												"FIleName": {
+													"value": "@concat(item().SensorId,'json')",
 													"type": "Expression"
-												}
+												},
+												"Directory": "SensorData"
 											}
 										}
 									]
@@ -560,10 +932,130 @@
 							"dataset": {
 								"referenceName": "DS_FromAdls",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"Directory": "locations",
+									"fileName": "locations"
+								}
 							},
 							"firstRowOnly": false
 						}
+					},
+					{
+						"name": "SqlToAdls",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_SQLDb",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_CSVToAdls",
+								"type": "DatasetReference",
+								"parameters": {
+									"DirectoryName": "SensorList",
+									"FileName": "SensorList.csv"
+								}
+							}
+						]
+					},
+					{
+						"name": "S3ToAdls",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AmazonS3ReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_S3Excle",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_CSVToAdls",
+								"type": "DatasetReference",
+								"parameters": {
+									"DirectoryName": "SmokeData",
+									"FileName": "AlbertaSmokePlupm.csv"
+								}
+							}
+						]
 					}
 				],
 				"policy": {
@@ -575,8 +1067,11 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_ToNotebook')]",
 				"[concat(variables('factoryId'), '/datasets/DS_FromAdls')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQLDb')]",
+				"[concat(variables('factoryId'), '/datasets/DS_CSVToAdls')]",
+				"[concat(variables('factoryId'), '/datasets/DS_S3Excle')]",
 				"[concat(variables('factoryId'), '/datasets/DS_FromAPI')]",
-				"[concat(variables('factoryId'), '/datasets/DS_ToAdls')]"
+				"[concat(variables('factoryId'), '/datasets/DS_JsonToAdls')]"
 			]
 		}
 	]

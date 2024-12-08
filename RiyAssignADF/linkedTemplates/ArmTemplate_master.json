@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'FromAdls'"
 		},
+		"LS_SqlDb_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_SqlDb'"
+		},
 		"LS_ToAdls_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ToAdls'"
@@ -19,9 +23,29 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_ToNotebook'"
 		},
+		"LS_S3Excle_secretAccessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'secretAccessKey' of 'LS_S3Excle'"
+		},
+		"LS_CsvToAdls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_CsvToAdls'"
+		},
 		"FromAdls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://riyassignadls.dfs.core.windows.net/"
+		},
+		"LS_SqlDb_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "riyaldbsrvr.database.windows.net"
+		},
+		"LS_SqlDb_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dbAssignment1"
+		},
+		"LS_SqlDb_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "radmin"
 		},
 		"LS_ToAdls_properties_typeProperties_url": {
 			"type": "string",
@@ -30,6 +54,10 @@
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',string(linkedService().Sensorid),'/days')}"
+		},
+		"LS_S3Excle_properties_typeProperties_accessKeyId": {
+			"type": "string",
+			"defaultValue": "AKIAQEIP3UWSXRW3ER6D"
 		},
 		"containerUri": {
 			"type": "string",
@@ -61,20 +89,41 @@
 					"FromAdls_accountKey": {
 						"value": "[parameters('FromAdls_accountKey')]"
 					},
+					"LS_SqlDb_password": {
+						"value": "[parameters('LS_SqlDb_password')]"
+					},
 					"LS_ToAdls_accountKey": {
 						"value": "[parameters('LS_ToAdls_accountKey')]"
 					},
 					"LS_ToNotebook_accessToken": {
 						"value": "[parameters('LS_ToNotebook_accessToken')]"
 					},
+					"LS_S3Excle_secretAccessKey": {
+						"value": "[parameters('LS_S3Excle_secretAccessKey')]"
+					},
+					"LS_CsvToAdls_connectionString": {
+						"value": "[parameters('LS_CsvToAdls_connectionString')]"
+					},
 					"FromAdls_properties_typeProperties_url": {
 						"value": "[parameters('FromAdls_properties_typeProperties_url')]"
+					},
+					"LS_SqlDb_properties_typeProperties_server": {
+						"value": "[parameters('LS_SqlDb_properties_typeProperties_server')]"
+					},
+					"LS_SqlDb_properties_typeProperties_database": {
+						"value": "[parameters('LS_SqlDb_properties_typeProperties_database')]"
+					},
+					"LS_SqlDb_properties_typeProperties_userName": {
+						"value": "[parameters('LS_SqlDb_properties_typeProperties_userName')]"
 					},
 					"LS_ToAdls_properties_typeProperties_url": {
 						"value": "[parameters('LS_ToAdls_properties_typeProperties_url')]"
 					},
 					"LS_from_api_properties_typeProperties_url": {
 						"value": "[parameters('LS_from_api_properties_typeProperties_url')]"
+					},
+					"LS_S3Excle_properties_typeProperties_accessKeyId": {
+						"value": "[parameters('LS_S3Excle_properties_typeProperties_accessKeyId')]"
 					}
 				}
 			},
