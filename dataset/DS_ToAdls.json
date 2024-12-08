@@ -6,10 +6,10 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"SansorId": {
+			"FIleName": {
 				"type": "String"
 			},
-			"SensorData": {
+			"Directory": {
 				"type": "String",
 				"defaultValue": "SensorData"
 			}
@@ -20,11 +20,11 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@concat('AQI_Data_',dataset().SansorId)",
+					"value": "@dataset().FIleName",
 					"type": "Expression"
 				},
 				"folderPath": {
-					"value": "@dataset().SansorId",
+					"value": "@dataset().Directory",
 					"type": "Expression"
 				},
 				"fileSystem": "bronze"

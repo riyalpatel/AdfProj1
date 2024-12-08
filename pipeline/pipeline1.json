@@ -121,11 +121,11 @@
 									"referenceName": "DS_ToAdls",
 									"type": "DatasetReference",
 									"parameters": {
-										"SansorId": {
+										"FIleName": {
 											"value": "@item().SensorId",
 											"type": "Expression"
 										},
-										"SensorData": "SensorData"
+										"Directory": "SensorData"
 									}
 								}
 							]
@@ -215,8 +215,8 @@
 						"referenceName": "DS_ToAdls",
 						"type": "DatasetReference",
 						"parameters": {
-							"SansorId": "SensorList",
-							"SensorData": "SemsorData"
+							"FIleName": "SensorList",
+							"Directory": "SemsorData"
 						}
 					}
 				]
@@ -264,8 +264,8 @@
 						"referenceName": "DS_ToAdls",
 						"type": "DatasetReference",
 						"parameters": {
-							"SansorId": "AlbertaSmokePlump",
-							"SensorData": "ALberaSmokeData"
+							"FIleName": "AlbertaSmokePlump.json",
+							"Directory": "ALberaSmokeData"
 						}
 					}
 				]
