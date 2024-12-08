@@ -73,7 +73,7 @@
 					"isSequential": true,
 					"activities": [
 						{
-							"name": "CopyFromAPI_copy",
+							"name": "APItoAdls",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
@@ -169,16 +169,9 @@
 				}
 			},
 			{
-				"name": "Copy data1",
+				"name": "SqlToAdls",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "ForEach1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -222,7 +215,7 @@
 				]
 			},
 			{
-				"name": "Copy data2",
+				"name": "S3ToAdls",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
