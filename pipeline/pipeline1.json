@@ -187,15 +187,25 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "JsonSink",
+						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobStorageWriteSettings"
 						},
 						"formatSettings": {
-							"type": "JsonWriteSettings"
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
 						}
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
@@ -205,12 +215,8 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_JsonToAdls",
-						"type": "DatasetReference",
-						"parameters": {
-							"FIleName": "SensorList",
-							"Directory": "SemsorData"
-						}
+						"referenceName": "DS_CSVToAdls",
+						"type": "DatasetReference"
 					}
 				]
 			},
