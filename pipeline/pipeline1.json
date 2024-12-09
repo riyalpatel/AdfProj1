@@ -5,11 +5,9 @@
 			{
 				"name": "ToSilver",
 				"type": "DatabricksNotebook",
-				"state": "Inactive",
-				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
-						"activity": "ForEach1",
+						"activity": "ForEachSensorList",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -32,7 +30,7 @@
 				}
 			},
 			{
-				"name": "SilverToGold",
+				"name": "ToGold",
 				"type": "DatabricksNotebook",
 				"state": "Inactive",
 				"onInactiveMarkAs": "Succeeded",
@@ -61,11 +59,11 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEachSensorList",
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup",
+						"activity": "LookupSensorList",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -141,7 +139,7 @@
 				}
 			},
 			{
-				"name": "Lookup",
+				"name": "LookupSensorList",
 				"type": "Lookup",
 				"dependsOn": [],
 				"policy": {
