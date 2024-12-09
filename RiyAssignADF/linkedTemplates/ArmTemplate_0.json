@@ -11,6 +11,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'FromAdls'"
 		},
+		"LS_CsvToAdls_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_CsvToAdls'"
+		},
+		"LS_S3Excle_secretAccessKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'secretAccessKey' of 'LS_S3Excle'"
+		},
 		"LS_SqlDb_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LS_SqlDb'"
@@ -23,17 +31,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_ToNotebook'"
 		},
-		"LS_S3Excle_secretAccessKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'secretAccessKey' of 'LS_S3Excle'"
-		},
-		"LS_CsvToAdls_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LS_CsvToAdls'"
-		},
 		"FromAdls_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://riyassignadls.dfs.core.windows.net/"
+		},
+		"LS_S3Excle_properties_typeProperties_accessKeyId": {
+			"type": "string",
+			"defaultValue": "AKIAQEIP3UWSXRW3ER6D"
 		},
 		"LS_SqlDb_properties_typeProperties_server": {
 			"type": "string",
@@ -54,10 +58,6 @@
 		"LS_from_api_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',string(linkedService().Sensorid),'/days')}"
-		},
-		"LS_S3Excle_properties_typeProperties_accessKeyId": {
-			"type": "string",
-			"defaultValue": "AKIAQEIP3UWSXRW3ER6D"
 		}
 	},
 	"variables": {
@@ -77,6 +77,38 @@
 						"type": "SecureString",
 						"value": "[parameters('FromAdls_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_CsvToAdls')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_CsvToAdls_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_S3Excle')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AmazonS3",
+				"typeProperties": {
+					"serviceUrl": "https://s3.amazonaws.com",
+					"accessKeyId": "[parameters('LS_S3Excle_properties_typeProperties_accessKeyId')]",
+					"secretAccessKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_S3Excle_secretAccessKey')]"
+					},
+					"authenticationType": "AccessKey"
 				}
 			},
 			"dependsOn": []
@@ -128,14 +160,14 @@
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-115008964882718.18.azuredatabricks.net",
+					"domain": "https://adb-4491958463368686.6.azuredatabricks.net",
 					"accessToken": {
 						"type": "SecureString",
 						"value": "[parameters('LS_ToNotebook_accessToken')]"
 					},
-					"newClusterNodeType": "Standard_DS3_v2",
+					"newClusterNodeType": "Standard_DS4_v2",
 					"newClusterNumOfWorker": "1",
-					"newClusterVersion": "14.3.x-scala2.12",
+					"newClusterVersion": "14.1.x-scala2.12",
 					"clusterOption": "Fixed",
 					"newClusterInitScripts": []
 				}
@@ -194,36 +226,47 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_S3Excle')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/DS_CSVToAdls')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"annotations": [],
-				"type": "AmazonS3",
-				"typeProperties": {
-					"serviceUrl": "https://s3.amazonaws.com",
-					"accessKeyId": "[parameters('LS_S3Excle_properties_typeProperties_accessKeyId')]",
-					"secretAccessKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_S3Excle_secretAccessKey')]"
+				"linkedServiceName": {
+					"referenceName": "LS_CsvToAdls",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"DirectoryName": {
+						"type": "String"
 					},
-					"authenticationType": "AccessKey"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_CsvToAdls')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
+					"FileName": {
+						"type": "String"
+					}
+				},
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"connectionString": "[parameters('LS_CsvToAdls_connectionString')]"
-				}
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().DirectoryName",
+							"type": "Expression"
+						},
+						"container": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_CsvToAdls')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DS_FromAPI')]",
@@ -313,47 +356,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/FromAdls')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQLDb')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_SqlDb",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "latitude",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "longitude",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "id",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "name",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CanadaSensors"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_SqlDb')]"
 			]
 		},
 		{
@@ -726,46 +728,44 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_CSVToAdls')]",
+			"name": "[concat(parameters('factoryName'), '/DS_SQLDb')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_CsvToAdls",
+					"referenceName": "LS_SqlDb",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"DirectoryName": {
-						"type": "String"
-					},
-					"FileName": {
-						"type": "String"
-					}
-				},
 				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": {
-							"value": "@dataset().FileName",
-							"type": "Expression"
-						},
-						"folderPath": {
-							"value": "@dataset().DirectoryName",
-							"type": "Expression"
-						},
-						"container": "bronze"
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "latitude",
+						"type": "float",
+						"precision": 15
 					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
+					{
+						"name": "longitude",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "id",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "name",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CanadaSensors"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_CsvToAdls')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_SqlDb')]"
 			]
 		},
 		{
@@ -777,9 +777,14 @@
 					{
 						"name": "ToSilver",
 						"type": "DatabricksNotebook",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "ForEachSensorList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -797,10 +802,8 @@
 						}
 					},
 					{
-						"name": "SilverToGold",
+						"name": "ToGold",
 						"type": "DatabricksNotebook",
-						"state": "Inactive",
-						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [
 							{
 								"activity": "ToSilver",
@@ -826,11 +829,11 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEachSensorList",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup",
+								"activity": "LookupSensorList",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -839,7 +842,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Lookup').output.value",
+								"value": "@activity('LookupSensorList').output.value",
 								"type": "Expression"
 							},
 							"isSequential": true,
@@ -894,7 +897,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"FIleName": {
-													"value": "@concat(item().SensorId,'json')",
+													"value": "@concat(item().SensorId,'.json')",
 													"type": "Expression"
 												},
 												"Directory": "SensorData"
@@ -906,7 +909,7 @@
 						}
 					},
 					{
-						"name": "Lookup",
+						"name": "LookupSensorList",
 						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
@@ -1000,6 +1003,8 @@
 					{
 						"name": "S3ToAdls",
 						"type": "Copy",
+						"state": "Inactive",
+						"onInactiveMarkAs": "Succeeded",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",

@@ -8,6 +8,12 @@
 		"FromAdls_accountKey": {
 			"value": ""
 		},
+		"LS_CsvToAdls_connectionString": {
+			"value": ""
+		},
+		"LS_S3Excle_secretAccessKey": {
+			"value": ""
+		},
 		"LS_SqlDb_password": {
 			"value": ""
 		},
@@ -17,14 +23,11 @@
 		"LS_ToNotebook_accessToken": {
 			"value": ""
 		},
-		"LS_S3Excle_secretAccessKey": {
-			"value": ""
-		},
-		"LS_CsvToAdls_connectionString": {
-			"value": ""
-		},
 		"FromAdls_properties_typeProperties_url": {
 			"value": "https://riyassignadls.dfs.core.windows.net/"
+		},
+		"LS_S3Excle_properties_typeProperties_accessKeyId": {
+			"value": "AKIAQEIP3UWSXRW3ER6D"
 		},
 		"LS_SqlDb_properties_typeProperties_server": {
 			"value": "riyaldbsrvr.database.windows.net"
@@ -40,9 +43,6 @@
 		},
 		"LS_from_api_properties_typeProperties_url": {
 			"value": "@{concat('https://api.openaq.org/v3/sensors/',string(linkedService().Sensorid),'/days')}"
-		},
-		"LS_S3Excle_properties_typeProperties_accessKeyId": {
-			"value": "AKIAQEIP3UWSXRW3ER6D"
 		}
 	}
 }
