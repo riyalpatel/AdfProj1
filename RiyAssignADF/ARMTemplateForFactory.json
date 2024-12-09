@@ -94,7 +94,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/rbp.fetr@gmail.com/Assing1"
+							"notebookPath": "/Users/rbp.fetr@gmail.com/ToSilver"
 						},
 						"linkedServiceName": {
 							"referenceName": "LS_ToNotebook",
@@ -121,7 +121,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/rbp.fetr@gmail.com/Assign1Part2"
+							"notebookPath": "/Users/rbp.fetr@gmail.com/ToGold"
 						},
 						"linkedServiceName": {
 							"referenceName": "LS_ToNotebook",
