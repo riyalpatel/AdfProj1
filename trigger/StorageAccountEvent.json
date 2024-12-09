@@ -1,5 +1,5 @@
 {
-	"name": "trigger1",
+	"name": "StorageAccountEvent",
 	"properties": {
 		"annotations": [],
 		"runtimeState": "Stopped",
@@ -13,7 +13,8 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/metadata/blobs/locations/locations.csv",
+			"blobPathBeginsWith": "/metadata/blobs/locations/",
+			"blobPathEndsWith": "locations.csv",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/b2c51e8b-c017-4c6a-bd57-27706b269aac/resourceGroups/RiyAssignOne/providers/Microsoft.Storage/storageAccounts/riyassignadls",
 			"events": [
