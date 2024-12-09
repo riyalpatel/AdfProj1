@@ -59,7 +59,7 @@
 			"type": "string",
 			"defaultValue": "@{concat('https://api.openaq.org/v3/sensors/',string(linkedService().Sensorid),'/days')}"
 		},
-		"trigger1_properties_typeProperties_scope": {
+		"StorageAccountEvent_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/b2c51e8b-c017-4c6a-bd57-27706b269aac/resourceGroups/RiyAssignOne/providers/Microsoft.Storage/storageAccounts/riyassignadls"
 		}
@@ -1084,7 +1084,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"name": "[concat(parameters('factoryName'), '/StorageAccountEvent')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1101,9 +1101,10 @@
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/metadata/blobs/locations/locations.csv",
+					"blobPathBeginsWith": "/metadata/blobs/locations/",
+					"blobPathEndsWith": "locations.csv",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('trigger1_properties_typeProperties_scope')]",
+					"scope": "[parameters('StorageAccountEvent_properties_typeProperties_scope')]",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
