@@ -10,7 +10,7 @@ This project is focused on ETL for data of Air Qulaity of Index in canada using 
 >> gold
 >> metadata
 
-![ADF Storage Account](Linke to be come)
+![medallion architecture - Storage Account](Photos/Storage.png)
 
 ##Ingetion
 for ingetion it uses ADF that copy data from API and Azure SQL, as it reads data from multiple endpoints to get data in bronze folder it uses meta data from which get list id from which wanted to read the data
@@ -22,6 +22,10 @@ Activities :
 3. Copy Data [SqlToAdls] - Copy Data From Azure SQL Database to ADLS
 4. Notebook Activity [ToSilver] - Trigger Notebook from Azure Data Bricks
 5. Notebook Activity [ToGold] - Trigger Notebook from Axure Data Bricks
+
+![ADF Pileline](Photos/PipeLine.png)
+![ADF Dataset Example](Photos/Dataset.png)
+
 
 List of sensorid From Metadata
 ```
