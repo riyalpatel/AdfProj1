@@ -4,7 +4,7 @@
 This project is focused on ETL for data of Air Qulaity of Index in canada using Azure Data Fectory Pipelinesa and Azure Data Bricks and Azure Data Lake Storage. The Goal is to transform and aggrigate data into actionable data for use of analysis.
 
 # Architecture for data storage
-> Storage Account : riyassignadls 
+> Storage Account : riyassignadls
 >> bronze
 >> silver
 >> gold
